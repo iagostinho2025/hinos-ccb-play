@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hinos CCB Play</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="icons/icon-192.png" type="image/png">
+    
+    <!-- Meta tags para PWA -->
+    <meta name="theme-color" content="#FF9A00">
+    <meta name="description" content="Reprodutor de Hinos da CCB - 480 hinos para louvor e adoração">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <style>
+        /* Estilos iniciais para evitar flash branco */
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #121212 0%, #1a1a1a 100%);
+            color: white;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+        }
+        
+        .loading-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #121212 0%, #1a1a1a 100%);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 9999;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top-color: #FF9A00;
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 20px;
+        }
+        
+        .loading-screen h1 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #FF9A00;
+        }
+        
+        .loading-screen p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Tela de carregamento inicial -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-spinner"></div>
+        <h1>Hinos CCB Play</h1>
+        <p>Carregando aplicativo...</p>
+    </div>
+
+    <!-- App Container (será preenchido via JS) -->
+    <div id="app" class="hidden">
+        <!-- HEADER SIMPLIFICADO -->
+        <header class="app-header">
+            <div class="header-content">
+                <button id="menu-toggle" class="icon-btn back-btn" aria-label="Abrir menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="app-title">Hinos CCB Play</h1>
+
+            </div>
+        </header>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="app-main">
+            <!-- BACKGROUND GRADIENTE -->
+            <div class="background-gradient"></div>
+            
+            <!-- PLAYER PRINCIPAL -->
+            <div class="player-container">
+                <!-- ABAS -->
+                <div class="player-tabs">
+                    <button class="tab-btn" data-tab="queue">
+                        <i class="fas fa-list-ol"></i>
+                        <span>Fila</span>
+                    </button>
+                    <button class="tab-btn active" data-tab="player">
+                        <i class="fas fa-music"></i>
+                        <span>Hino</span>
+                    </button>
+                    <button class="tab-btn" data-tab="lyrics">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Letra</span>
+                    </button>
+                </div>
+                
+                <!-- CONTEÚDO DAS ABAS -->
+                <div class="tab-content">
+                    <!-- ABA: PLAYER -->
+                    <div class="tab-pane active" id="player-tab">
+                        <!-- CAPA DO HINO -->
+                        <div class="album-art">
+                            <div class="art-placeholder">
+                                <i class="fas fa-music"></i>
+                            </div>
+                        </div>
+                        
+                        <!-- INFORMAÇÕES DO HINO -->
+                        <div class="song-info">
+                            <h2 id="song-title">Cristo meu mestre</h2>
+                        </div>
+                        
+                        <!-- CONTROLES SECUNDÁRIOS -->
+<div class="secondary-controls">
+    <button id="favorite-btn" class="icon-btn" title="Favorito">
+        <i class="far fa-heart"></i>
+    </button>
+    
+    <button id="playlist-add-btn" class="icon-btn" title="Adicionar à playlist">
+        <i class="fas fa-list-ul"></i>
+    </button>
+    
+    <div class="volume-control-wrapper">
+        <button id="volume-btn" class="icon-btn" title="Mudo/Som">
+            <i class="fas fa-volume-up"></i>
+        </button>
+        <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.8">
+    </div>
+</div>
+                        
+                        <!-- BARRA DE PROGRESSO -->
+                        <div class="progress-container">
+                            <span id="current-time" class="time">0:00</span>
+                            <div class="progress-bar">
+                                <input type="range" id="progress-slider" value="0" max="100">
+                                <div class="progress-fill" id="progress-fill"></div>
+                            </div>
+                            <span id="total-time" class="time">0:00</span>
+                        </div>
+                        
+                        <!-- CONTROLES PRINCIPAIS -->
+                        <div class="player-controls">
+                            <button id="shuffle-btn" class="control-btn" title="Embaralhar">
+                                <i class="fas fa-random"></i>
+                            </button>
+                            <button id="prev-btn" class="control-btn" title="Anterior">
+                                <i class="fas fa-step-backward"></i>
+                            </button>
+                            <button id="play-btn" class="control-btn play-btn" title="Play/Pause">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <button id="next-btn" class="control-btn" title="Próximo">
+                                <i class="fas fa-step-forward"></i>
+                            </button>
+                            <button id="repeat-btn" class="control-btn" title="Repetir">
+                                <i class="fas fa-redo"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- ABA: LETRA -->
+                    <div class="tab-pane" id="lyrics-tab">
+                        <div class="lyrics-container">
+                            <h3>Letra do Hino</h3>
+                            <div id="lyrics-content" class="lyrics-content">
+                                <p>Letra do hino será exibida aqui...</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- ABA: FILA -->
+                    <div class="tab-pane" id="queue-tab">
+                        <div class="queue-container">
+                            <div class="queue-header">
+                                <h3>Fila de Reprodução</h3>
+                            </div>
+                            <div id="queue-list" class="queue-list">
+                                <!-- Fila será carregada aqui -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- MENU LATERAL -->
+            <nav id="side-menu" class="side-menu">
+                <div class="menu-header">
+                    <h2>Hinos CCB</h2>
+                    <button id="menu-close" class="icon-btn" aria-label="Fechar menu">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="search-container">
+                    <input type="text" id="menu-search" placeholder="Buscar hinos..." autocomplete="off">
+                    <i class="fas fa-search"></i>
+                </div>
+                
+                <ul class="menu-list">
+                    <li>
+                        <a href="#" class="menu-item active" data-view="library">
+                            <i class="fas fa-music"></i>
+                            <span>Todos os Hinos</span>
+                            <span id="all-hinos-count" class="badge">480</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="menu-item" data-view="categories">
+                            <i class="fas fa-folder"></i>
+                            <span>Categorias</span>
+                            <span id="categories-count" class="badge">4</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="menu-item" data-view="favorites">
+                            <i class="fas fa-heart"></i>
+                            <span>Favoritos</span>
+                            <span id="favorites-count" class="badge">0</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="menu-item" data-view="playlists">
+                            <i class="fas fa-list"></i>
+                            <span>Playlists</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="menu-item" data-view="settings">
+                            <i class="fas fa-cog"></i>
+                            <span>Configurações</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <!-- OVERLAY PARA MENU -->
+            <div id="menu-overlay" class="menu-overlay"></div>
+        </main>
+
+        <!-- TOAST/ NOTIFICAÇÕES -->
+        <div id="toast-container"></div>
+    </div>
+
+    <!-- ÁUDIO ELEMENT (invisível) -->
+    <audio id="audio-player" preload="metadata"></audio>
+
+    <!-- SCRIPTS MODULARES -->
+    <script src="modules/utils.js"></script>
+    <script src="modules/storage.js"></script>
+    <script src="modules/favorites.js"></script>
+	<script src="modules/playlists.js"></script>
+    <script src="modules/player.js"></script>
+    <script src="modules/categories.js"></script>
+    <script src="modules/views.js"></script>
+	<script src="modules/settings.js"></script>
+    <script src="app.js"></script>
+    
+    <!-- INICIALIZAÇÃO DO SERVICE WORKER (PWA) -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then(registration => {
+                        console.log('Service Worker registrado:', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('Falha ao registrar Service Worker:', error);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
