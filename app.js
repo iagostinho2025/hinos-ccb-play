@@ -1,5 +1,5 @@
 // app.js - Hinos CCB Play - CORE MODULAR
-// VERSÃO FINAL CORRIGIDA (Navegação + Botões Novos)
+// VERSÃO FINAL CORRIGIDA (Com Filtro de Hinos Vazios)
 
 // ===== CONFIGURAÇÃO GLOBAL DO APP =====
 const AppState = {
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if(elements.loadingScreen) elements.loadingScreen.classList.add('hidden');
             if(elements.app) elements.app.classList.remove('hidden');
             
-            // Carregar primeiro hino (sem dar play)
+            // Carregar primeiro hino (sem dar play) se houver hinos válidos
             if (AppState.hinos.length > 0 && !AppState.currentHino) {
                 AppState.currentHino = AppState.hinos[0];
                 updatePlayerUI();
@@ -82,7 +82,14 @@ async function loadInitialData() {
     try {
         const response = await fetch('data/hinos.json');
         if (!response.ok) throw new Error('Erro ao carregar JSON');
-        AppState.hinos = await response.json();
+        
+        const allData = await response.json();
+        
+        // --- FILTRO DE HINOS VÁLIDOS ---
+        // Só carrega hinos que tenham título preenchido (remove os vazios e os "Em breve...")
+        AppState.hinos = allData.filter(hino => hino.titulo && hino.titulo.trim() !== "");
+        
+        // A fila inicial é igual à lista de hinos válidos
         AppState.queue = [...AppState.hinos]; 
         
         const savedSettings = localStorage.getItem('hinosCCB_settings');
@@ -90,6 +97,7 @@ async function loadInitialData() {
         
     } catch (error) {
         console.error("Erro dados:", error);
+        showToast('Erro ao carregar lista de hinos', 'error');
     }
 }
 
