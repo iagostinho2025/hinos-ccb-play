@@ -90,7 +90,7 @@
   {
     "id": 12,
     "numero": "012",
-    "titulo": "",
+    "titulo": "Sempre em Jesus confiarei",
     "duracao": 210,
     "arquivo": "https://archive.org/download/017_20251225/012.mp3",
     "letra": "Sempre em Jesus confiarei, Sua Palavra honrarei\nPor Sua morte atroz na cruz, me concedeu eterna luz\n\nCristo me guia com poder\nCristo me guia com saber\nEle é o Amigo mui fiel\nCristo Jesus, o Emanuel\n\nOs bons conselhos de Jesus são, para mim, divina luz\nEles me trazem retidão e divinal consolação\n\nCristo me guia com poder\nCristo me guia com saber\nEle é o Amigo mui fiel\nCristo Jesus, o Emanuel\n\nEu vou avante, com valor; sigo por fé o meu Senhor\nNo céu, um dia, O verei e igual a Ele então serei\n\nCristo me guia com poder\nCristo me guia com saber\nEle é o Amigo mui fiel\nCristo Jesus, o Emanuel"
@@ -398,7 +398,7 @@
     "duracao": 210,
     "arquivo": "https://archive.org/download/017_20251225/050.mp3",
     "letra": "Glória a Jesus! Aleluia! Glória ao grande Rei!\nGlória por todo o sempre a Cristo eu darei\nEle me tem conduzido, com fé e com amor\nNeste caminho de vida, glória ao bom Pastor!\n\nGlória a Jesus! Aleluia! Eu sempre cantarei\nGlória a Jesus! Aleluia! Nele prosperarei\nReceberei sempre forças do meu bom Salvador\nPara, em todo o momento, Lhe tributar louvor\n\nGlória a Jesus! Aleluia! Por minha salvação\nGlória e honra Lhe devo, e minha gratidão\nMerecedor é meu Mestre de receber louvor\nPois me dará a vitória, por Seu imenso amor\n\nGlória, glória a Jesus, o meu Pastor fiel!\nGlória ao Salvador, Cristo, Emanuel\nGlória não cessarei de dar ao Redentor\nMinha alma engrandece ao meu eternal Senhor!"
-  }
+  },
   {
     "id": 51,
     "numero": "051",
@@ -3630,7 +3630,7 @@
   "duracao": 210,
   "arquivo": "https://archive.org/download/017_20251225/454.mp3",
   "letra": "Ó Deus bendito, sou pequenino\nMas já caminho pelo Teu ensino\nSou neste mundo um peregrino\nJá me fizeste cidadão dos céus\n\nVivo alegre, em paz Te sigo\nNada receio, pois estou Contigo\nNeste deserto, em Ti me abrigo\nJá me fizeste cidadão dos céus\n\nÉs minha força e segurança\nÉs meu apoio, minha esperança\nÉs minha vida e confiança\nJá me fizeste cidadão dos céus"
-},
+  },
   {
     "id": 455,
     "numero": "455",
@@ -3839,5 +3839,4 @@
     "arquivo": "https://archive.org/download/017_20251225/480.mp3",
     "letra": ""
   }
-]
 ]
